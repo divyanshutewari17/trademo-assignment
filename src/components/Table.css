@@ -1,0 +1,49 @@
+/* Table container */
+.table-container {
+    background-color: #ffffff; /* Light background for the table container */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for the container */
+    overflow: hidden; /* Ensure borders and shadows are contained */
+    margin-top: 1rem;
+  }
+  
+  /* Table */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  /* Table header */
+  .table thead {
+    background-color: #f0f0f0; /* Light grey for table headers */
+  }
+  
+  .table th {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Subtle border for header */
+    color: #333; /* Dark text for readability */
+  }
+  
+  /* Table rows */
+  .table tbody tr {
+    border-bottom: 1px solid #ddd; /* Subtle border between rows */
+  }
+  
+  .table td {
+    padding: 0.75rem;
+    color: #333; /* Dark text for readability */
+  }
+  
+  /* Hover effect for rows */
+  .table tbody tr:hover {
+    background-color: #f9f9f9; /* Light grey background on hover */
+  }
+  
+  /* Empty state styling (if needed) */
+  .table-empty {
+    text-align: center;
+    padding: 1rem;
+    color: #999; /* Light grey text for empty state */
+  }
+  

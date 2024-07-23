@@ -1,0 +1,75 @@
+/* General dashboard container */
+.dashboard {
+    padding: 2rem;
+    background-color: #f4f4f4; /* Light background for the main dashboard */
+    color: #333; /* Dark text for readability */
+    border-radius: 8px;
+  }
+  
+  /* Dashboard title */
+  .dashboard-title {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #333; /* Dark text for readability */
+    margin-bottom: 1rem;
+  }
+  
+  /* Tabs container */
+  .dashboard-tabs {
+    margin-top: 1rem;
+  }
+  
+  /* Tab list */
+  .dashboard-tablist {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  
+  /* Tab items */
+  .dashboard-tab {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1e90ff;
+    padding: 0.75rem 1rem;
+    margin-right: 0.5rem;
+    border: 1px solid #1e90ff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    background-color: #ffffff; /* Light background for tabs */
+  }
+  
+  .dashboard-tab:hover {
+    background-color: #1e90ff;
+    color: #ffffff;
+  }
+  
+  .dashboard-tab.selected {
+    background-color: #1e90ff;
+    color: #ffffff;
+    font-weight: 700;
+  }
+  
+  /* Tab panels */
+  .dashboard-tabpanel {
+    background-color: #ffffff; /* Light background for tab panels */
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: none; /* Hide all panels by default */
+    margin-top: 1rem;
+  }
+  
+  .dashboard-tabpanel.active {
+    display: block; /* Show only the active panel */
+  }
+  
+  /* Loading text */
+  .loading-text {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+  }
+  
