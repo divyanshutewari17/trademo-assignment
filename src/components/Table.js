@@ -1,26 +1,29 @@
 import React from 'react';
-import './Table.css';
+import { Table as MuiTable, TableHead, TableBody, TableRow, TableCell, Paper, TableContainer } from '@mui/material';
+import '../styles/Table.css';
 
 const Table = ({ columns, data }) => {
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          {columns.map(col => (
-            <th key={col.key}>{col.label}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, index) => (
-          <tr key={index}>
+    <TableContainer component={Paper} className="table-container">
+      <MuiTable className="table">
+        <TableHead>
+          <TableRow>
             {columns.map(col => (
-              <td key={col.key}>{row[col.key] || 'N/A'}</td>
+              <TableCell key={col.key}>{col.label}</TableCell>
             ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row, index) => (
+            <TableRow key={index}>
+              {columns.map(col => (
+                <TableCell key={col.key}>{row[col.key] || 'N/A'}</TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </MuiTable>
+    </TableContainer>
   );
 };
 

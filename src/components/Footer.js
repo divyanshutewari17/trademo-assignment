@@ -1,13 +1,14 @@
 import React from 'react';
-import './Footer.css';
+import { Box, Typography } from '@mui/material';
+import '../styles/Footer.css';
 
 const Footer = () => {
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <p>Supply Chain Dashboard © 2024</p>
-      </div>
-    </footer>
+    <Box component="footer" sx={{ backgroundColor: '#1e1e1e', color: 'white', padding: '1rem', textAlign: 'center' }}>
+      <Typography variant="body2">
+        Supply Chain Dashboard © 2024
+      </Typography>
+    </Box>
   );
 };
 

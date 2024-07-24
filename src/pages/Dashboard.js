@@ -1,11 +1,11 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy, startTransition } from 'react';
 import Papa from 'papaparse';
-import { Tabs, Tab, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import './Dashboard.css';
+import { Tabs, Tab, Box, Typography, CircularProgress, AppBar, Grid, Button, Modal } from '@mui/material';
+import '../styles/Dashboard.css';
 
 const Chart = lazy(() => import('../components/Chart'));
 const Table = lazy(() => import('../components/Table'));
+const PieChartComponent = lazy(() => import('../components/PieChart'));
 
 const Dashboard = () => {
   const [products, setProducts] = useState([]);
@@ -13,6 +13,8 @@ const Dashboard = () => {
   const [shipments, setShipments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+  const [modalType, setModalType] = useState('')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +42,14 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const handleOpenModal = () => {
+    startTransition(() => {
+      setOpenModal(true);
+    });
+  };
+
+  const handleCloseModal = () => setOpenModal(false);
+
   const processProductCategoryData = (data) => {
     const categoryMap = data.reduce((acc, item) => {
       if (item.Category) {
@@ -52,6 +62,8 @@ const Dashboard = () => {
       count: categoryMap[key],
     }));
   };
+
+  const productCategoryColors = ['#8884d8', '#8dd1e1', '#82ca9d', '#ffc658'];
 
   const processStockData = (data) => {
     return data.map(item => ({
@@ -72,6 +84,7 @@ const Dashboard = () => {
       count: originMap[key],
     }));
   };
+
 
   const productCategoryColumns = [
     { key: 'Product ID', label: 'Product ID' },
@@ -102,52 +115,157 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <h2 className="dashboard-title">Dashboard</h2>
+      <Typography variant="h4" className="dashboard-title" sx={{ textAlign: 'center', mb: 1 }}>Dashboard</Typography>
       {loading ? (
-        <p className="loading-text">Loading...</p>
+        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+          <CircularProgress />
+          <Typography className="loading-text">Loading...</Typography>
+        </Box>
       ) : (
-        <Suspense fallback={<div className="loading-text">Loading components...</div>}>
-          <Tabs selectedIndex={selectedIndex} onSelect={index => setSelectedIndex(index)} className="dashboard-tabs">
-            <TabList className="dashboard-tablist">
-              <Tab className={`dashboard-tab ${selectedIndex === 0 ? 'selected' : ''}`}>Products</Tab>
-              <Tab className={`dashboard-tab ${selectedIndex === 1 ? 'selected' : ''}`}>Suppliers</Tab>
-              <Tab className={`dashboard-tab ${selectedIndex === 2 ? 'selected' : ''}`}>Shipments</Tab>
-            </TabList>
-
-            <TabPanel className={`dashboard-tabpanel ${selectedIndex === 0 ? 'active' : ''}`}>
-              <Table columns={productCategoryColumns} data={products} />
-              <Chart
-                data={processProductCategoryData(products)}
-                dataKey="category"
-                barKey="count"
-                barColor="#1e90ff"
-                title="Product Categories"
-              />
-              <Chart
-                data={processStockData(products)}
-                dataKey="name"
-                barKey="stock"
-                barColor="#32cd32"
-                title="Stock Quantities"
-              />
-            </TabPanel>
-
-            <TabPanel className={`dashboard-tabpanel ${selectedIndex === 1 ? 'active' : ''}`}>
-              <Table columns={supplierColumns} data={suppliers} />
-            </TabPanel>
-
-            <TabPanel className={`dashboard-tabpanel ${selectedIndex === 2 ? 'active' : ''}`}>
-              <Table columns={shipmentColumns} data={shipments} />
-              <Chart
-                data={processShipmentData(shipments)}
-                dataKey="origin"
-                barKey="count"
-                barColor="#ff4500"
-                title="Shipment Origins"
-              />
-            </TabPanel>
-          </Tabs>
+        <Suspense fallback={<Box className="loading-text">Loading components...</Box>}>
+          <AppBar position="static" color="default">
+            <Tabs
+              value={selectedIndex}
+              onChange={(e, newValue) => setSelectedIndex(newValue)}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+            >
+              <Tab label="Products" />
+              <Tab label="Suppliers" />
+              <Tab label="Shipments" />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={selectedIndex} index={0}>
+            <Box display="flex" justifyContent="flex-end" sx={{ mb: 2 }}>
+              <Button variant="contained" color="primary" onClick={()=> {
+                handleOpenModal(); 
+                setModalType('product')} 
+              }>Show Charts</Button>
+            </Box>
+            <Table columns={productCategoryColumns} data={products} />
+          </TabPanel>
+          <TabPanel value={selectedIndex} index={1}>
+            
+            <Table columns={supplierColumns} data={suppliers} />
+          </TabPanel>
+          <TabPanel value={selectedIndex} index={2}>
+            <Box display="flex" justifyContent="flex-end" sx={{ mb: 2 }}>
+            <Button variant="contained" color="primary" onClick={()=> {
+                handleOpenModal(); 
+                setModalType('shipment')} 
+              }>Show Charts</Button>
+            </Box>
+            <Table columns={shipmentColumns} data={shipments} />
+          </TabPanel>
         </Suspense>
+      )}
+      {
+        modalType === 'product' &&
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 800,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            maxHeight: '90vh',
+            overflowY: 'auto',
+          }}>
+            <Typography id="modal-title" variant="h6" component="h2">
+              Product Analysis
+            </Typography>
+            <Suspense fallback={<Box className="loading-text">Loading components...</Box>}>
+              <Grid container spacing={2} sx={{ mt: 2 }}>
+                <Grid item xs={12} md={8}>
+                  <Chart
+                    data={processStockData(products)}
+                    dataKey="name"
+                    barKey="stock"
+                    barColor="#32cd32"
+                    title="Stock Quantities"
+                  />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <PieChartComponent
+                    data={processProductCategoryData(products)}
+                    dataKey="count"
+                    nameKey="category"
+                    colors={productCategoryColors}
+                    title="Product Categories Distribution"
+                  />
+                </Grid>
+              </Grid>
+            </Suspense>
+          </Box>
+        </Modal>
+      }
+      {
+        modalType === 'shipment' &&
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 800,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            maxHeight: '90vh',
+            overflowY: 'auto',
+          }}>
+            <Typography id="modal-title" variant="h6" component="h2">
+              Shipment Charts
+            </Typography>
+            <Suspense fallback={<Box className="loading-text">Loading components...</Box>}>
+              <Grid container spacing={2} sx={{ mt: 2 }}>
+                <Grid item xs={12}>
+                  <Chart
+                    data={processShipmentData(shipments)}
+                    dataKey="origin"
+                    barKey="count"
+                    barColor="#ff4500"
+                    title="Shipment Origins"
+                  />
+                </Grid>
+              </Grid>
+            </Suspense>
+          </Box>
+        </Modal>
+      }
+      
+    </div>
+  );
+};
+
+const TabPanel = (props) => {
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
       )}
     </div>
   );
