@@ -61,7 +61,7 @@ const Dashboard = () => {
           <Typography className="loading-text">Loading...</Typography>
         </Box>
       ) : (
-        <Suspense fallback={<Box className="loading-text">Loading components...</Box>}>
+        <Suspense fallback={<Box className="loading-text">Loading ...</Box>}>
           <AppBar position="static" color="default">
             <Tabs
               value={selectedIndex}
@@ -170,7 +170,7 @@ const Dashboard = () => {
             <Typography id="modal-title" variant="h6" component="h2">
               Shipment Charts
             </Typography>
-            <Suspense fallback={<Box className="loading-text">Loading components...</Box>}>
+            <Suspense fallback={<Box className="loading-text">Loading ...</Box>}>
               <Grid container spacing={2} sx={{ mt: 2 }}>
                 <Grid item xs={12}>
                   <Chart
