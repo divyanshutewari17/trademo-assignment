@@ -1,7 +1,7 @@
 # Supply Chain Dashboard
 
-Live Link: https://supply-chain.choreoapps.dev
-Github Repository: https://github.com/divyanshutewari17/trademo-assignment
+* Live Link: https://supply-chain.choreoapps.dev
+* Github Repository: https://github.com/divyanshutewari17/trademo-assignment
 
 ### Framework
 Framework: ReactJs
