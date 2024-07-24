@@ -1,6 +1,7 @@
 # Supply Chain Dashboard
 
-Live Link: https://supply-chain.choreoapps.dev
+* Live Link: https://supply-chain.choreoapps.dev
+* Github Repository: https://github.com/divyanshutewari17/trademo-assignment
 
 ### Framework
 Framework: ReactJs
@@ -10,6 +11,9 @@ Framework: ReactJs
 * papaparse
 * react-router-dom
 * recharts
+
+### Loading Time
+* Range: 0 - 1.3 secs
 
 ### Project Setup
 ```
