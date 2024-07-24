@@ -2,6 +2,8 @@ import React, { useState, useEffect, Suspense, lazy, startTransition } from 'rea
 import Papa from 'papaparse';
 import { Tabs, Tab, Box, Typography, CircularProgress, AppBar, Grid, Button, Modal } from '@mui/material';
 import '../styles/Dashboard.css';
+import { productCategoryColors, productCategoryColumns, shipmentColumns, supplierColumns } from '../utils/constants';
+import { processProductCategoryData, processShipmentData, processStockData } from '../utils/helpers';
 
 const Chart = lazy(() => import('../components/Chart'));
 const Table = lazy(() => import('../components/Table'));
@@ -49,69 +51,6 @@ const Dashboard = () => {
   };
 
   const handleCloseModal = () => setOpenModal(false);
-
-  const processProductCategoryData = (data) => {
-    const categoryMap = data.reduce((acc, item) => {
-      if (item.Category) {
-        acc[item.Category] = acc[item.Category] ? acc[item.Category] + 1 : 1;
-      }
-      return acc;
-    }, {});
-    return Object.keys(categoryMap).map((key) => ({
-      category: key,
-      count: categoryMap[key],
-    }));
-  };
-
-  const productCategoryColors = ['#8884d8', '#8dd1e1', '#82ca9d', '#ffc658'];
-
-  const processStockData = (data) => {
-    return data.map(item => ({
-      name: item['Product Name'] || '',
-      stock: parseInt(item['Stock Quantity'], 10) || 0,
-    })).filter(item => item.name);
-  };
-
-  const processShipmentData = (data) => {
-    const originMap = data.reduce((acc, item) => {
-      if (item.Origin) {
-        acc[item.Origin] = acc[item.Origin] ? acc[item.Origin] + 1 : 1;
-      }
-      return acc;
-    }, {});
-    return Object.keys(originMap).map((key) => ({
-      origin: key,
-      count: originMap[key],
-    }));
-  };
-
-
-  const productCategoryColumns = [
-    { key: 'Product ID', label: 'Product ID' },
-    { key: 'Product Name', label: 'Product Name' },
-    { key: 'Category', label: 'Category' },
-    { key: 'Unit Price', label: 'Unit Price' },
-    { key: 'Stock Quantity', label: 'Stock Quantity' },
-  ];
-
-  const shipmentColumns = [
-    { key: 'Shipment ID', label: 'Shipment ID' },
-    { key: 'Date', label: 'Date' },
-    { key: 'Origin', label: 'Origin' },
-    { key: 'Destination', label: 'Destination' },
-    { key: 'Product ID', label: 'Product ID' },
-    { key: 'Quantity', label: 'Quantity' },
-    { key: 'Supplier ID', label: 'Supplier ID' },
-    { key: 'Transport Mode', label: 'Transport Mode' },
-  ];
-
-  const supplierColumns = [
-    { key: 'Supplier ID', label: 'Supplier ID' },
-    { key: 'Supplier Name', label: 'Supplier Name' },
-    { key: 'Country', label: 'Country' },
-    { key: 'Contact Person', label: 'Contact Person' },
-    { key: 'Contact Email', label: 'Contact Email' },
-  ];
 
   return (
     <div className="dashboard">
